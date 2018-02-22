@@ -9,4 +9,55 @@
         <item name="android:statusBarColor">@color/statusBackground</item>
     </style>
 
+    <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">#fff</item>
+        <item name="colorControlNormal">#FFF</item>
+        <item name="colorControlActivated">#FFF</item>
+    </style>
+    <!-- Base application theme. -->
+
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+    <style name="ThemeOverlay.MyApp.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <!-- Parent theme sets colorControlNormal to textColorPrimary. -->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+
+
+    </style>
+
+    <style name="ThemeOverlay.AppCompat.navTheme" >
+
+        <!-- Color of text and icon when SELECTED -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+
+    </style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+    <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#fff</item>
+        <item name="colorControlNormal">#c5c5c5</item>
+        <item name="colorControlActivated">#c5c5c5</item>
+        <item name="colorControlHighlight">#c5c5c5</item>
+    </style>
+
+    <style name="lineColor" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">#c5c5c5</item>
+        <item name="colorControlActivated">#c5c5c5</item>
+        <item name="colorControlHighlight">#c5c5c5</item>
+    </style>
+
 </resources>
