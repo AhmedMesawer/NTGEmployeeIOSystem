@@ -2,4 +2,11 @@
     <string name="app_name">NTGEmployeeIOSystem</string>
     <string name="time_sheet_string">Time Sheet</string>
     <string name="sign_out_string">Sign Out</string>
+    <string-array name="Team">
+        <item>Mobile</item>
+        <item>IT</item>
+        <item>Backend</item>
+        <item>Testing</item>
+    </string-array>
+    <string name="team">Team</string>
 </resources>
