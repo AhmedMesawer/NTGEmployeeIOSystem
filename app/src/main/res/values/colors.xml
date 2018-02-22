@@ -6,5 +6,7 @@
     <color name="background">#89B6BD</color>
     <color name="backgroundTransparent">#4089B6BD</color>
     <color name="statusBackground">#d80027</color>
+    <color name="statusBackgroundTransparent">#40d80027</color>
+    <color name="blackTransparent">#40000000</color>
     <color name="colorTransparent">#00000000</color>
 </resources>
