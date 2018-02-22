@@ -11,6 +11,7 @@ public interface IOContract {
     interface View extends IView<Presenter> {
         void showSuccessAttendenceMsg();
         void showFailedAttendenceMsg(String errMsg);
+        void showTeam();
     }
 
     interface Presenter extends IPresenter{

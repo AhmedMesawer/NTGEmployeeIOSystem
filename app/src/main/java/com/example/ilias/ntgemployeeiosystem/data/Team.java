@@ -17,9 +17,9 @@ import java.lang.annotation.RetentionPolicy;
 })
 
 @Retention(RetentionPolicy.RUNTIME)
-@interface Team {
+public  @interface Team {
     String MOBILE = "mobile";
-    String TESTING = "testing";
-    String BACKEND = "backend";
-    String IT = "it";
+     String TESTING = "testing";
+    public String BACKEND = "backend";
+    public String IT = "it";
 }
