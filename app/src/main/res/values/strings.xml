@@ -9,4 +9,8 @@
         <item>Testing</item>
     </string-array>
     <string name="team">Team</string>
+    <string name="employee_name_et_hint">Employee Name</string>
+    <string name="register_now_btn_text">Register Now</string>
+    <string name="ntg_email_et_hint">NTG Email</string>
+    <string name="registration_image_cd">Registration Image</string>
 </resources>

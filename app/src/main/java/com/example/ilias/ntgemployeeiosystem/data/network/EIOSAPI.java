@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class EIOSAPI {
 
 
-    static Retrofit getClient() {
+    public static Retrofit getClient() {
 
         String baseURL = "http://mesawer.getsandbox.com/";
 

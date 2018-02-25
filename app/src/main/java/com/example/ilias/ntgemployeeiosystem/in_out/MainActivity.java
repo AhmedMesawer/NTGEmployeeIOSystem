@@ -1,32 +1,31 @@
 package com.example.ilias.ntgemployeeiosystem.in_out;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
 
-import com.afollestad.materialdialogs.GravityEnum;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.ilias.ntgemployeeiosystem.R;
-import com.example.ilias.ntgemployeeiosystem.data.Team;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.example.ilias.ntgemployeeiosystem.data.source.remote.EmployeesRemoteDataSource;
+import com.example.ilias.ntgemployeeiosystem.sign_up.RegistrationActivity;
+import com.example.ilias.ntgemployeeiosystem.utils.Injection;
 
 public class MainActivity extends AppCompatActivity implements IOContract.View {
-    @BindView(R.id.team)
-    Button team;
+
+    public static final String EMPLOYEE_INTENT_KEY = "employee";
+    private IOContract.Presenter ioPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_main);
+        ioPresenter = new IOPresenter(this, Injection.provideEmployeesRemoteDataSource());
+//        Toast.makeText(this, getNetworkMACAddress(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.time_sheet_action:
 
                 return true;
@@ -45,50 +44,41 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
 
                 return true;
             default:
-             return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+    }
 
-        team.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTeam();
+    @Override
+    public void showSuccessAttendanceMsg() {
+
+    }
+
+    @Override
+    public void navigateToRegistrationActivity() {
+        Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void showFailedAttendanceMsg(String errMsg) {
+
+    }
+
+    private String getNetworkMACAddress(){
+        WifiManager wifiManager =
+                (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager != null) {
+            WifiInfo info = wifiManager.getConnectionInfo();
+            if (info != null) {
+                return info.getBSSID();
             }
-        });
+        }
+        return null;
     }
-
-    @Override
-    public void setPresenter(IOContract.Presenter presenter) {
-
-    }
-
-    @Override
-    public void showSuccessAttendenceMsg() {
-
-    }
-
-    @Override
-    public void showFailedAttendenceMsg(String errMsg) {
-
-    }
-
-    @Override
-    public void showTeam() {
-        new MaterialDialog.Builder(MainActivity.this)
-                .title(getResources().getString(R.string.team))
-                .items(getResources().getStringArray(R.array.Team))
-                .titleGravity(GravityEnum.CENTER)
-                .itemsGravity(GravityEnum.CENTER)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-
-                    }
-                }).show();
-    }
-
 }

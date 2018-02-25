@@ -13,7 +13,11 @@ public class IOPresenter implements IOContract.Presenter {
     public IOPresenter(IOContract.View view, EmployeesDataSource employeesDataSource) {
         this.view = view;
         this.employeesDataSource = employeesDataSource;
-        view.setPresenter(this);
+    }
+
+    @Override
+    public void getEmployeeIfExist(String email) {
+
     }
 
     @Override

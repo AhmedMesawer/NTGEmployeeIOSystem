@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ntg_logo"
+    android:background="@drawable/gradient_background"
     tools:context="com.example.ilias.ntgemployeeiosystem.in_out.MainActivity">
 
     <android.support.design.widget.FloatingActionButton
@@ -33,10 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="168dp"
         android:text="You are coming at"
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
+        android:textColor="@color/background"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,10 +48,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="?android:attr/colorAccent"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:text="09.30 am" />
 </android.support.constraint.ConstraintLayout>
