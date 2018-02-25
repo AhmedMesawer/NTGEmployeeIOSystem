@@ -7,17 +7,17 @@ import com.example.ilias.ntgemployeeiosystem.data.source.EmployeesDataSource;
  */
 
 public class IOPresenter implements IOContract.Presenter {
-    private IOContract.View view;
+    private IOContract.View ioView;
     private EmployeesDataSource employeesDataSource;
 
-    public IOPresenter(IOContract.View view, EmployeesDataSource employeesDataSource) {
-        this.view = view;
+    public IOPresenter(IOContract.View ioView, EmployeesDataSource employeesDataSource) {
+        this.ioView = ioView;
         this.employeesDataSource = employeesDataSource;
     }
 
     @Override
     public void getEmployeeIfExist(String email) {
-
+//        employeesDataSource.getEmployee(email,);
     }
 
     @Override

@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     @Override
     protected void onResume() {
         super.onResume();
+        ioPresenter.getEmployeeIfExist("ahmed@ntgclarity.com");
+//        navigateToRegistrationActivity();
     }
 
     @Override

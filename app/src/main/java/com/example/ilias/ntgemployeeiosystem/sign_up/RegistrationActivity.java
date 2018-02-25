@@ -14,12 +14,17 @@ import com.example.ilias.ntgemployeeiosystem.data.Employee;
 import com.example.ilias.ntgemployeeiosystem.in_out.MainActivity;
 import com.example.ilias.ntgemployeeiosystem.utils.Injection;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.example.ilias.ntgemployeeiosystem.in_out.MainActivity.EMPLOYEE_INTENT_KEY;
 
-public class RegistrationActivity extends AppCompatActivity implements RegistrationContract.View{
+public class RegistrationActivity extends AppCompatActivity implements RegistrationContract.View {
 
     @BindView(R.id.choose_team_text_view)
     TextView chooseTeamTextView;
@@ -41,13 +46,10 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         chooseTeamTextView.setOnClickListener(view -> showChooseTeamDialog());
     }
 
-    public void showChooseTeamDialog() {
-        new MaterialDialog.Builder(RegistrationActivity.this)
-                .title(getResources().getString(R.string.team))
-                .items(getResources().getStringArray(R.array.Team))
-                .titleGravity(GravityEnum.CENTER)
-                .itemsGravity(GravityEnum.CENTER)
-                .itemsCallback((dialog, itemView, position, text) -> chooseTeamTextView.setText(text)).show();
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -76,5 +78,56 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         intent.putExtra(EMPLOYEE_INTENT_KEY, employee);
         startActivity(intent);
         finish();
+    }
+
+    private void showChooseTeamDialog() {
+        new MaterialDialog.Builder(RegistrationActivity.this)
+                .title(getResources().getString(R.string.team))
+                .items(getResources().getStringArray(R.array.Team))
+                .titleGravity(GravityEnum.CENTER)
+                .itemsGravity(GravityEnum.CENTER)
+                .itemsCallback(
+                        (dialog, itemView, position, text) -> {
+                            chooseTeamTextView.setError(null);
+                            chooseTeamTextView.setText(text);
+                        })
+                .show();
+    }
+
+    private Employee getValidRegistrationDataFromEmployee() {
+        String name = employeeNameEditText.getText().toString();
+        String email = emailEditText.getText().toString();
+        String team = chooseTeamTextView.getText().toString();
+        List<String> teams = Arrays.asList(getResources().getStringArray(R.array.Team));
+        Employee employee = null;
+        if (isNotNullOrEmpty(name) && isValidNTGEmail(email) && teams.contains(team)) {
+            employee = new Employee(name, email, team);
+        } else {
+            if (!isNotNullOrEmpty(name))
+                employeeNameEditText.setError("This field shouldn't be blank");
+            if (!isValidNTGEmail(email))
+                emailEditText.setError("please enter valid NTG email");
+            if (!teams.contains(team))
+                chooseTeamTextView.setError("please choose your team");
+        }
+        return employee;
+    }
+
+    private boolean isValidNTGEmail(String s) {
+        String regexp = "^[\\w-+]+(\\.[\\w]+)*@ntgclarity.com$";
+        Pattern pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
+        return pattern.matcher(s).matches();
+    }
+
+    private boolean isNotNullOrEmpty(String s) {
+        return s != null && !s.isEmpty();
+    }
+
+    @OnClick(R.id.register_now_button)
+    public void onViewClicked() {
+        Employee employee = getValidRegistrationDataFromEmployee();
+        if (employee != null) {
+            registrationPresenter.signUp(employee);
+        }
     }
 }
