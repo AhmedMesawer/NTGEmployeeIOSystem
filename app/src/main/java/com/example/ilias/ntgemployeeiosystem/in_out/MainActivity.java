@@ -8,11 +8,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.ilias.ntgemployeeiosystem.R;
-import com.example.ilias.ntgemployeeiosystem.data.source.remote.EmployeesRemoteDataSource;
-import com.example.ilias.ntgemployeeiosystem.sign_up.RegistrationActivity;
+import com.example.ilias.ntgemployeeiosystem.registration.RegistrationActivity;
 import com.example.ilias.ntgemployeeiosystem.utils.Injection;
 
 public class MainActivity extends AppCompatActivity implements IOContract.View {
@@ -51,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     @Override
     protected void onResume() {
         super.onResume();
-        ioPresenter.getEmployeeIfExist("ahmed@ntgclarity.com");
-//        navigateToRegistrationActivity();
     }
 
     @Override

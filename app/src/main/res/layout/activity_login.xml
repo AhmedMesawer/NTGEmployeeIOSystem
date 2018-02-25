@@ -2,7 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background">
+    android:background="@drawable/gradient_background"
+    android:id="@+id/login_layout">
 
     <ImageView
         android:id="@+id/logo"
@@ -10,7 +11,7 @@
         android:layout_height="124dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="88dp"
         android:contentDescription="@string/registration_image_cd"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -28,8 +29,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="56dp"
         android:background="@drawable/custom_btn_background"
-        android:drawableStart="@drawable/profile"
-        android:hint="@string/employee_name_et_hint"
+        android:drawableStart="@drawable/email"
+        android:ems="10"
+        android:hint="@string/ntg_email_et_hint"
+        android:inputType="textEmailAddress"
         android:maxLines="1"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
@@ -42,54 +45,30 @@
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
 
-    <TextView
-        android:id="@+id/choose_team_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/custom_btn_background"
-        android:drawableEnd="@drawable/down_arrow"
-        android:drawableStart="@drawable/team"
-        android:gravity="center_vertical"
-        android:hint="@string/team"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:spinnerMode="dropdown"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/email_edit_text"
-        app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="@+id/email_edit_text"
-        app:layout_constraintTop_toBottomOf="@+id/email_edit_text" />
-
     <Button
         android:id="@+id/login_button"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/custom_btn_background"
-        android:text="@string/register_now_btn_text"
+        android:text="@string/login_string"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="@+id/logo"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/logo"
-        app:layout_constraintTop_toBottomOf="@+id/choose_team_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/password_edit_text" />
 
     <EditText
-        android:id="@+id/email_edit_text"
+        android:id="@+id/password_edit_text"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_btn_background"
-        android:drawableStart="@drawable/email"
-        android:ems="10"
-        android:hint="@string/ntg_email_et_hint"
-        android:inputType="textEmailAddress"
+        android:drawableStart="@drawable/lock"
+        android:hint="@string/password_string"
+        android:inputType="textPassword"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:textColor="@android:color/white"
@@ -97,6 +76,20 @@
         app:layout_constraintEnd_toEndOf="@+id/login_email_edit_text"
         app:layout_constraintStart_toStartOf="@+id/login_email_edit_text"
         app:layout_constraintTop_toBottomOf="@+id/login_email_edit_text" />
+
+    <TextView
+        android:id="@+id/create_account_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/create_account_string"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@+id/login_button"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="@+id/login_button"
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
 
 
 </android.support.constraint.ConstraintLayout>

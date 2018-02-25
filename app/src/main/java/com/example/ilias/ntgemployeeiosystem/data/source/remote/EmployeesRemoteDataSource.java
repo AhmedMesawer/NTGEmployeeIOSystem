@@ -39,10 +39,14 @@ public class EmployeesRemoteDataSource implements EmployeesDataSource {
     }
 
     @Override
-    public void getEmployee(String mac,
+    public void getEmployee(String email,
                             SuccessfulResponseWithResultCallback<Employee> resultCallback,
                             FailedResponseCallback failedCallback) {
-
+        service.getEmployee(email)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultCallback::onSuccess,
+                        t -> failedCallback.onError(convertToReadableMessage(t)));
     }
 
     @Override
@@ -57,14 +61,14 @@ public class EmployeesRemoteDataSource implements EmployeesDataSource {
     }
 
     @Override
-    public void addWorkDay(String mac, WorkDay workDay,
+    public void addWorkDay(String email, WorkDay workDay,
                            SuccessfulResponseCallback successCallback,
                            FailedResponseCallback failedCallback) {
 
     }
 
     @Override
-    public void setEmployeeOut(String mac, String date, WorkDay workDay,
+    public void setEmployeeOut(String email, String date, WorkDay workDay,
                                SuccessfulResponseCallback successCallback,
                                FailedResponseCallback failedCallback) {
 
@@ -81,12 +85,7 @@ public class EmployeesRemoteDataSource implements EmployeesDataSource {
             if (responseErrorBody != null) {
                 try {
                     APIError apiError = converter.convert(responseErrorBody);
-                    switch (apiError.getCode()) {
-
-                        default:
-                            return "Service Error";
-                    }
-
+                    return apiError.getMessage();
                 } catch (IOException e) {
                     Log.e(TAG, "HTTP Converting Failed");
                 }

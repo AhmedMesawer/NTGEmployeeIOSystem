@@ -1,4 +1,4 @@
-package com.example.ilias.ntgemployeeiosystem.sign_up;
+package com.example.ilias.ntgemployeeiosystem.registration;
 
 import com.example.ilias.ntgemployeeiosystem.base.IPresenter;
 import com.example.ilias.ntgemployeeiosystem.base.IView;

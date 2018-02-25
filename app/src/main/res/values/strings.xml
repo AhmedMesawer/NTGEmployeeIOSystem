@@ -13,4 +13,7 @@
     <string name="register_now_btn_text">Register Now</string>
     <string name="ntg_email_et_hint">NTG Email</string>
     <string name="registration_image_cd">Registration Image</string>
+    <string name="login_string">Login</string>
+    <string name="password_string">Password</string>
+    <string name="create_account_string"><u>create account</u></string>
 </resources>

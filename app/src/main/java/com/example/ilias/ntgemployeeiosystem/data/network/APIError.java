@@ -18,7 +18,7 @@ public class APIError {
         return code;
     }
 
-    String getMessage() {
+    public String getMessage() {
         return message;
     }
 }

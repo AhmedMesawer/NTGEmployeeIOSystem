@@ -1,4 +1,4 @@
-package com.example.ilias.ntgemployeeiosystem.sign_up;
+package com.example.ilias.ntgemployeeiosystem.registration;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,21 +16,22 @@ import com.example.ilias.ntgemployeeiosystem.utils.Injection;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.example.ilias.ntgemployeeiosystem.in_out.MainActivity.EMPLOYEE_INTENT_KEY;
+import static com.example.ilias.ntgemployeeiosystem.utils.StringUtil.isNullOrEmpty;
+import static com.example.ilias.ntgemployeeiosystem.utils.StringUtil.isValidNTGEmail;
 
 public class RegistrationActivity extends AppCompatActivity implements RegistrationContract.View {
 
     @BindView(R.id.choose_team_text_view)
     TextView chooseTeamTextView;
-    @BindView(R.id.employee_name_edit_text)
+    @BindView(R.id.login_email_edit_text)
     EditText employeeNameEditText;
-    @BindView(R.id.register_now_button)
+    @BindView(R.id.login_button)
     Button registerNowButton;
     @BindView(R.id.email_edit_text)
     EditText emailEditText;
@@ -100,10 +101,10 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         String team = chooseTeamTextView.getText().toString();
         List<String> teams = Arrays.asList(getResources().getStringArray(R.array.Team));
         Employee employee = null;
-        if (isNotNullOrEmpty(name) && isValidNTGEmail(email) && teams.contains(team)) {
+        if (!isNullOrEmpty(name) && isValidNTGEmail(email) && teams.contains(team)) {
             employee = new Employee(name, email, team);
         } else {
-            if (!isNotNullOrEmpty(name))
+            if (isNullOrEmpty(name))
                 employeeNameEditText.setError("This field shouldn't be blank");
             if (!isValidNTGEmail(email))
                 emailEditText.setError("please enter valid NTG email");
@@ -113,17 +114,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         return employee;
     }
 
-    private boolean isValidNTGEmail(String s) {
-        String regexp = "^[\\w-+]+(\\.[\\w]+)*@ntgclarity.com$";
-        Pattern pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
-        return pattern.matcher(s).matches();
-    }
-
-    private boolean isNotNullOrEmpty(String s) {
-        return s != null && !s.isEmpty();
-    }
-
-    @OnClick(R.id.register_now_button)
+    @OnClick(R.id.login_button)
     public void onViewClicked() {
         Employee employee = getValidRegistrationDataFromEmployee();
         if (employee != null) {
