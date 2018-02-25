@@ -5,4 +5,5 @@ package com.example.ilias.ntgemployeeiosystem.base;
  */
 
 public interface IPresenter {
+
 }
