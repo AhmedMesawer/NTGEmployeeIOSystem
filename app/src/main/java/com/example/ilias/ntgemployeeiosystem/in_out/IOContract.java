@@ -3,6 +3,7 @@ package com.example.ilias.ntgemployeeiosystem.in_out;
 import com.example.ilias.ntgemployeeiosystem.base.IPresenter;
 import com.example.ilias.ntgemployeeiosystem.base.IView;
 import com.example.ilias.ntgemployeeiosystem.data.Employee;
+import com.example.ilias.ntgemployeeiosystem.data.WorkDay;
 import com.example.ilias.ntgemployeeiosystem.data.source.remote.FailedResponseCallback;
 import com.example.ilias.ntgemployeeiosystem.data.source.remote.SuccessfulResponseCallback;
 import com.example.ilias.ntgemployeeiosystem.data.source.remote.SuccessfulResponseWithResultCallback;
@@ -13,18 +14,25 @@ import com.example.ilias.ntgemployeeiosystem.data.source.remote.SuccessfulRespon
 
 public interface IOContract {
     interface View extends IView {
-        void showSuccessAttendanceMsg();
 
         void navigateToRegistrationActivity();
 
+        void navigateToLoginActivity();
+
+        void showSuccessAttendanceMsg(WorkDay workDay);
+
         void showFailedAttendanceMsg(String errMsg);
+
+        void changeFABIconAndDeactivate();
+
+        void activateFAB();
     }
 
     interface Presenter extends IPresenter {
         void getEmployeeIfExist(String email);
 
-        void setEmployeeAttended();
+        void setEmployeeAttended(String email, WorkDay workDay);
 
-        void setEmployeeWentOut();
+        void setEmployeeWentOut(String email, String workDayId, String wentOutTime);
     }
 }

@@ -62,9 +62,13 @@ public class EmployeesRemoteDataSource implements EmployeesDataSource {
 
     @Override
     public void addWorkDay(String email, WorkDay workDay,
-                           SuccessfulResponseCallback successCallback,
+                           SuccessfulResponseWithResultCallback<WorkDay> resultCallback,
                            FailedResponseCallback failedCallback) {
-
+        service.addWorkDay(email, workDay)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultCallback::onSuccess,
+                        throwable -> failedCallback.onError(convertToReadableMessage(throwable)));
     }
 
     @Override
@@ -93,6 +97,8 @@ public class EmployeesRemoteDataSource implements EmployeesDataSource {
                 return null;
             }
         }
-        return "Unknown Error: Try to Refresh Your App";
+//        return "Unknown Error: Try to Refresh Your App";
+        Log.d(TAG, t.toString());
+        return t.toString();
     }
 }

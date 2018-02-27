@@ -1,5 +1,6 @@
 package com.example.ilias.ntgemployeeiosystem.in_out;
 
+import com.example.ilias.ntgemployeeiosystem.data.WorkDay;
 import com.example.ilias.ntgemployeeiosystem.data.source.EmployeesDataSource;
 
 /**
@@ -21,12 +22,16 @@ public class IOPresenter implements IOContract.Presenter {
     }
 
     @Override
-    public void setEmployeeAttended() {
-
+    public void setEmployeeAttended(String email, WorkDay workDay) {
+        employeesDataSource.addWorkDay(email, workDay,
+                ioView::showSuccessAttendanceMsg,
+                ioView::showFailedAttendanceMsg);
+        ioView.changeFABIconAndDeactivate();
     }
 
     @Override
-    public void setEmployeeWentOut() {
+    public void setEmployeeWentOut(String email, String workDayId, String wentOutTime) {
 
     }
+
 }

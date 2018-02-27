@@ -22,7 +22,7 @@ public interface EmployeesDataSource {
                      FailedResponseCallback failedCallback);
 
     void addWorkDay(String email, WorkDay workDay,
-                    SuccessfulResponseCallback successCallback,
+                    SuccessfulResponseWithResultCallback<WorkDay> resultCallback,
                     FailedResponseCallback failedCallback);
 
     void setEmployeeOut(String email, String date, WorkDay workDay,

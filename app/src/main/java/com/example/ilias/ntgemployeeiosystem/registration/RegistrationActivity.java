@@ -3,6 +3,7 @@ package com.example.ilias.ntgemployeeiosystem.registration;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.ilias.ntgemployeeiosystem.R;
 import com.example.ilias.ntgemployeeiosystem.data.Employee;
 import com.example.ilias.ntgemployeeiosystem.in_out.MainActivity;
+import com.example.ilias.ntgemployeeiosystem.login.LoginActivity;
 import com.example.ilias.ntgemployeeiosystem.utils.Injection;
 
 import java.util.Arrays;
@@ -36,6 +38,8 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     @BindView(R.id.email_edit_text)
     EditText emailEditText;
     RegistrationContract.Presenter registrationPresenter;
+    @BindView(R.id.already_have_account_text_view)
+    TextView alreadyHaveAccountTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,13 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         finish();
     }
 
+    @Override
+    public void navigateToLoginActivity() {
+        Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void showChooseTeamDialog() {
         new MaterialDialog.Builder(RegistrationActivity.this)
                 .title(getResources().getString(R.string.team))
@@ -114,11 +125,19 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         return employee;
     }
 
-    @OnClick(R.id.login_button)
-    public void onViewClicked() {
-        Employee employee = getValidRegistrationDataFromEmployee();
-        if (employee != null) {
-            registrationPresenter.signUp(employee);
+    @OnClick({R.id.login_button, R.id.already_have_account_text_view})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.login_button:
+                Employee employee = getValidRegistrationDataFromEmployee();
+                if (employee != null) {
+                    registrationPresenter.signUp(employee);
+                }
+                break;
+            case R.id.already_have_account_text_view:
+                navigateToLoginActivity();
+                break;
         }
+
     }
 }

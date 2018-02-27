@@ -1,4 +1,4 @@
-package com.example.ilias.ntgemployeeiosystem.data;
+package com.example.ilias.ntgemployeeiosystem.annotations;
 
 import android.support.annotation.StringDef;
 

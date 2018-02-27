@@ -15,6 +15,7 @@ public interface RegistrationContract {
         void showInvalidEmailMsg();
         void showEmptyDataMsg();
         void navigateToEmployeeActivity(Employee employee);
+        void navigateToLoginActivity();
     }
 
     interface Presenter extends IPresenter{

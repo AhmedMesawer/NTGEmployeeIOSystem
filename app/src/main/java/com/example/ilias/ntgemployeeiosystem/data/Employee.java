@@ -3,6 +3,8 @@ package com.example.ilias.ntgemployeeiosystem.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.ilias.ntgemployeeiosystem.annotations.Team;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,8 @@ import java.util.List;
 public class Employee implements Parcelable {
     private String name;
     private String email;
-    private @Team String team;
+    private @Team
+    String team;
     private List<WorkDay> workDays;
     private double overTime;
     private double lateTime;
@@ -56,8 +59,8 @@ public class Employee implements Parcelable {
         return workDays;
     }
 
-    public void setWorkDays(List<WorkDay> workDays) {
-        this.workDays = workDays;
+    public void setWorkDay(WorkDay workDay) {
+        this.workDays.add(workDay);
     }
 
     public double getOverTime() {

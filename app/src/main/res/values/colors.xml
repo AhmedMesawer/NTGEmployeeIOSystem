@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#89b6bd</color>
     <color name="background">#89B6BD</color>
+    <color name="backgroundDisable">#c4c3c5</color>
     <color name="backgroundHalf">#9089B6BD</color>
     <color name="backgroundTransparent">#4089B6BD</color>
     <color name="statusBackground">#d80027</color>
