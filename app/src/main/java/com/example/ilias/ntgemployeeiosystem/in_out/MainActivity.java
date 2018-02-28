@@ -2,6 +2,7 @@ package com.example.ilias.ntgemployeeiosystem.in_out;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     String currentDate;
     String currentTime;
     private boolean isForAttendance = true;
+    SharedPreferences preferences;
     //endregion
 
     //region Activity LifeCycle Callbacks
@@ -65,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
         ioPresenter = new IOPresenter(this, Injection.provideEmployeesRemoteDataSource());
         if (getIntent() != null) {
             employee = getIntent().getParcelableExtra(EMPLOYEE_INTENT_KEY);
+            if (employee != null) {
+                editSignInSessionPreferences(employee.getEmail());
+            }
         }
 //        Toast.makeText(this, getNetworkMACAddress(), Toast.LENGTH_LONG).show();
     }
@@ -72,6 +77,15 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     @Override
     protected void onResume() {
         super.onResume();
+        preferences = getPreferences(Context.MODE_PRIVATE);
+        if (preferences != null) {
+            String email = preferences.getString("employeeEmail", null);
+            if (email != null) {
+                ioPresenter.getEmployeeIfExist(email);
+            } else {
+                navigateToLoginActivity();
+            }
+        }
 //        getCurrent(CURRENT_DATE_REQUEST_CODE);
 //        getCurrent(CURRENT_TIME_REQUEST_CODE);
     }
@@ -94,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
                 getCurrent(CURRENT_DATE_REQUEST_CODE);
             }
             youCanGoNow = savedInstanceState.getBoolean(YOU_CAN_GO_NOW);
-            if (youCanGoNow){
+            if (youCanGoNow) {
                 enableFABForWentOut();
             }
         }
@@ -115,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
 
                 return true;
             case R.id.sign_out_action:
+                editSignInSessionPreferences(null);
                 navigateToLoginActivity();
                 return true;
             default:
@@ -149,6 +164,11 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     }
 
     @Override
+    public void showEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    @Override
     public void navigateToLoginActivity() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
@@ -156,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     }
 
     @Override
-    public void showFailedAttendanceMsg(String errMsg) {
+    public void showFailedRequestMsg(String errMsg) {
         Snackbar.make(mainLayout, errMsg, Snackbar.LENGTH_LONG).show();
     }
 
@@ -188,6 +208,15 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     //endregion
 
     //region Helper Methods
+
+    private void editSignInSessionPreferences(String sessionId) {
+        preferences = getPreferences(Context.MODE_PRIVATE);
+        if (preferences != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("employeeEmail", sessionId);
+            editor.apply();
+        }
+    }
 
     private void startTimer() {
         Intent intent = new Intent(MainActivity.this, TimerService.class);
@@ -221,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
         outFab.setImageDrawable(getResources().getDrawable(R.drawable.exit));
         outFab.setEnabled(true);
     }
-    //endregion
+//endregion
 
     //region ServiceResultReceiver
     class ServiceResultReceiver extends ResultReceiver {
@@ -240,10 +269,10 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
                 }
             } else if (resultCode == 1) {
                 currentDate = resultData.getString("date");
-            }else if (resultCode == 2) {
+            } else if (resultCode == 2) {
                 currentTime = resultData.getString("time");
             }
         }
     }
-    //endregion
+//endregion
 }

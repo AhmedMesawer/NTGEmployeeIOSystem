@@ -17,13 +17,15 @@ public interface IOContract {
 
         void navigateToRegistrationActivity();
 
+        void showEmployee(Employee employee);
+
         void navigateToLoginActivity();
 
         void showSuccessAttendanceMsg(WorkDay workDay);
 
         void showSuccessWentOutMsg(WorkDay workDay);
 
-        void showFailedAttendanceMsg(String errMsg);
+        void showFailedRequestMsg(String errMsg);
 
         void changeFABIconAndDeactivate();
 

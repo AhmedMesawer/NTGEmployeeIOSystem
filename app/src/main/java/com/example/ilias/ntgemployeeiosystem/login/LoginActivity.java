@@ -1,13 +1,10 @@
 package com.example.ilias.ntgemployeeiosystem.login;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,12 +12,9 @@ import android.widget.TextView;
 
 import com.example.ilias.ntgemployeeiosystem.R;
 import com.example.ilias.ntgemployeeiosystem.data.Employee;
-import com.example.ilias.ntgemployeeiosystem.data.WorkDay;
 import com.example.ilias.ntgemployeeiosystem.in_out.MainActivity;
 import com.example.ilias.ntgemployeeiosystem.registration.RegistrationActivity;
 import com.example.ilias.ntgemployeeiosystem.utils.Injection;
-
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
