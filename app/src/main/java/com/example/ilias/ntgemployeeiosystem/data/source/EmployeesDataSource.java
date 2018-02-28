@@ -26,6 +26,6 @@ public interface EmployeesDataSource {
                     FailedResponseCallback failedCallback);
 
     void setEmployeeOut(String email, String date, WorkDay workDay,
-                        SuccessfulResponseCallback successCallback,
+                        SuccessfulResponseWithResultCallback<WorkDay> resultCallback,
                         FailedResponseCallback failedCallback);
 }

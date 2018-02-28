@@ -30,8 +30,10 @@ public class IOPresenter implements IOContract.Presenter {
     }
 
     @Override
-    public void setEmployeeWentOut(String email, String workDayId, String wentOutTime) {
-
+    public void setEmployeeWentOut(String email, String workDayId, WorkDay workDay) {
+        employeesDataSource.setEmployeeOut(email, workDayId, workDay,
+                ioView::showSuccessWentOutMsg,
+                ioView::showFailedAttendanceMsg);
     }
 
 }

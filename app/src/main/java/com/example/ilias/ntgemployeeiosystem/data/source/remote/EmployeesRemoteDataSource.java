@@ -73,9 +73,13 @@ public class EmployeesRemoteDataSource implements EmployeesDataSource {
 
     @Override
     public void setEmployeeOut(String email, String date, WorkDay workDay,
-                               SuccessfulResponseCallback successCallback,
+                               SuccessfulResponseWithResultCallback<WorkDay> resultCallback,
                                FailedResponseCallback failedCallback) {
-
+        service.setWorkDayOut(email, date, workDay)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultCallback::onSuccess,
+                        throwable -> failedCallback.onError(convertToReadableMessage(throwable)));
     }
 
     private String convertToReadableMessage(Throwable t) {

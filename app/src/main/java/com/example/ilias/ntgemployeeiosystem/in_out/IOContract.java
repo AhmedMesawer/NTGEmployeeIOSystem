@@ -21,6 +21,8 @@ public interface IOContract {
 
         void showSuccessAttendanceMsg(WorkDay workDay);
 
+        void showSuccessWentOutMsg(WorkDay workDay);
+
         void showFailedAttendanceMsg(String errMsg);
 
         void changeFABIconAndDeactivate();
@@ -33,6 +35,6 @@ public interface IOContract {
 
         void setEmployeeAttended(String email, WorkDay workDay);
 
-        void setEmployeeWentOut(String email, String workDayId, String wentOutTime);
+        void setEmployeeWentOut(String email, String workDayId, WorkDay workDay);
     }
 }
