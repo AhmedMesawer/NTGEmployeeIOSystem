@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.ilias.ntgemployeeiosystem.R;
@@ -37,6 +38,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     LoginContract.Presenter loginPresenter;
     @BindView(R.id.login_layout)
     ConstraintLayout loginLayout;
+    @BindView(R.id.login_progress_bar)
+    ProgressBar loginProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 String email = loginEmailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 if (isValidNTGEmail(email) && !isNullOrEmpty(password))
+                    loginProgressBar.setVisibility(View.VISIBLE);
                     loginPresenter.login(email, password);
                 if (!isValidNTGEmail(email))
                     loginEmailEditText.setError("invalid NTG email");
@@ -78,6 +82,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         intent.putExtra(EMPLOYEE_INTENT_KEY, employee);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void hideLoadingIndicator() {
+        loginProgressBar.setVisibility(View.GONE);
     }
 
     @Override

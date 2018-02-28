@@ -18,17 +18,32 @@ public class IOPresenter implements IOContract.Presenter {
 
     @Override
     public void getEmployeeIfExist(String email) {
+        ioView.deactivateFAB();
         employeesDataSource.getEmployee(email,
-                ioView::showEmployee,
-                ioView::showFailedRequestMsg);
+                employee -> {
+                    ioView.hideLoadingIndicator();
+                    ioView.activateFAB();
+                    ioView.showEmployee(employee);
+                },
+                errMsg -> {
+                    ioView.hideLoadingIndicator();
+                    ioView.showFailedRequestMsg(errMsg);
+                });
     }
 
     @Override
     public void setEmployeeAttended(String email, WorkDay workDay) {
+        ioView.showLoadingIndicator();
         employeesDataSource.addWorkDay(email, workDay,
-                ioView::showSuccessAttendanceMsg,
-                ioView::showFailedRequestMsg);
-        ioView.changeFABIconAndDeactivate();
+                wd -> {
+                    ioView.hideLoadingIndicator();
+                    ioView.showSuccessAttendanceMsg(wd);
+                    ioView.changeFABIconAndDeactivate();
+                },
+                errMsg -> {
+                    ioView.hideLoadingIndicator();
+                    ioView.showFailedRequestMsg(errMsg);
+                });
     }
 
     @Override

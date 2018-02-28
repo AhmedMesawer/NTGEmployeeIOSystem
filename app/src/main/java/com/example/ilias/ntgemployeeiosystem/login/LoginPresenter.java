@@ -19,7 +19,13 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void login(String email, String password) {
         employeesDataSource.getEmployee(email,
-                loginView::navigateToEmployeeActivity,
-                loginView::showFailedLoginMsg);
+                employee -> {
+                    loginView.hideLoadingIndicator();
+                    loginView.navigateToEmployeeActivity(employee);
+                },
+                errMsg -> {
+                    loginView.hideLoadingIndicator();
+                    loginView.showFailedLoginMsg(errMsg);
+                });
     }
 }

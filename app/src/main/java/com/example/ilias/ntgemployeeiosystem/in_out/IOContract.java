@@ -25,11 +25,17 @@ public interface IOContract {
 
         void showSuccessWentOutMsg(WorkDay workDay);
 
+        void showLoadingIndicator();
+
+        void hideLoadingIndicator();
+
         void showFailedRequestMsg(String errMsg);
 
         void changeFABIconAndDeactivate();
 
         void activateFAB();
+
+        void deactivateFAB();
     }
 
     interface Presenter extends IPresenter {

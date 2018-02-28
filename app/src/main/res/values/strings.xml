@@ -8,6 +8,14 @@
         <item>Backend</item>
         <item>Testing</item>
     </string-array>
+
+    <string-array name="accepted_MAC">
+        <item>00:fe:c8:36:9f:31</item>
+        <item>00:fe:c8:55:92:41</item>
+        <item>01:80:c2:00:00:03</item>
+        <item>1e:65:9d:c9:e3:88</item>
+    </string-array>
+
     <string name="team">Team</string>
     <string name="employee_name_et_hint">Employee Name</string>
     <string name="register_now_btn_text">Register Now</string>

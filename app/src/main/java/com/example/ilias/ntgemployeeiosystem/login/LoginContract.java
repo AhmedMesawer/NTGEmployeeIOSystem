@@ -15,6 +15,8 @@ public interface LoginContract {
 
         void navigateToEmployeeActivity(Employee employee);
 
+        void hideLoadingIndicator();
+
         void navigateToRegistrationActivity();
     }
 
