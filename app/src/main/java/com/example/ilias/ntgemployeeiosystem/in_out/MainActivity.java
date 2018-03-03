@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ilias.ntgemployeeiosystem.R;
 import com.example.ilias.ntgemployeeiosystem.data.Employee;
@@ -33,16 +32,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.example.ilias.ntgemployeeiosystem.in_out.DateTimeService.REQUEST_CODE_INTENT_KEY;
 import static com.example.ilias.ntgemployeeiosystem.in_out.TimerService.RESULT_RECEIVER_INTENT_KEY;
+import static com.example.ilias.ntgemployeeiosystem.utils.StringUtil.isNullOrEmpty;
 
 public class MainActivity extends AppCompatActivity implements IOContract.View {
 
     //region Activity Fields
     public static final String EMPLOYEE_INTENT_KEY = "employee";
     public static final String YOU_CAN_GO_NOW = "youCanGoNow";
-    public static final String IS_DATE_ADDED = "isDateAdded";
-    private final String SHARED_PREFERENCES_FILE_KEY = "SHARED_PREFERENCES_FILE_KEY";
+    public static final String IS_ATTENDED = "isAttended";
+    public static final String SHARED_PREFERENCES_FILE_KEY = "MainSharedPreferences";
+    public static final String EMPLOYEE_EMAIL_VALUE_KEY = "employeeEmailValueKey";
+    public static final String WORKDAY_DATE_VALUE_KEY = "WorkdayDateValueKey";
     @BindView(R.id.out_fab)
     FloatingActionButton outFab;
     @BindView(R.id.info_text_view)
@@ -56,12 +57,9 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     private IOContract.Presenter ioPresenter;
     private Employee employee;
     private WorkDay workDay;
-    boolean youCanGoNow = false;
+    boolean youCanGoNow;
     ServiceResultReceiver serviceResultReceiver;
-    boolean isCurrentDateAdded = false;
-    String currentDate;
-    String currentTime;
-    private boolean isForAttendance = true;
+    private boolean isAttended;
     SharedPreferences preferences;
     //endregion
 
@@ -74,11 +72,8 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
         ioPresenter = new IOPresenter(this, Injection.provideEmployeesRemoteDataSource());
         if (getIntent() != null) {
             employee = getIntent().getParcelableExtra(EMPLOYEE_INTENT_KEY);
-            if (employee != null) {
-                editSignInSessionPreferences(employee.getEmail());
-            }
         }
-        Toast.makeText(this, getNetworkMACAddress(), Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, getNetworkMACAddress(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -86,40 +81,45 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
         super.onResume();
         preferences = getSharedPreferences(SHARED_PREFERENCES_FILE_KEY, Context.MODE_PRIVATE);
         if (preferences != null) {
-            String email = preferences.getString("employeeEmail", null);
-            if (email != null) {
+            youCanGoNow = preferences.getBoolean(YOU_CAN_GO_NOW, false);
+            isAttended = preferences.getBoolean(IS_ATTENDED, false);
+            if (isAttended) {
+                setFABForWentOutAppearance(youCanGoNow);
+            } else {
+                setFABForAttendanceAppearance();
+            }
+            String email = preferences.getString(EMPLOYEE_EMAIL_VALUE_KEY, null);
+            if (!isNullOrEmpty(email)) {
                 ioPresenter.getEmployeeIfExist(email);
             } else {
                 navigateToLoginActivity();
             }
         }
-//        getCurrent(CURRENT_DATE_REQUEST_CODE);
-//        getCurrent(CURRENT_TIME_REQUEST_CODE);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-//        outState.putBoolean(YOU_CAN_GO_NOW, youCanGoNow);
-//        outState.putBoolean(IS_DATE_ADDED, isCurrentDateAdded);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-//        if (savedInstanceState == null) {
-//            getCurrent(CURRENT_DATE_REQUEST_CODE);
-//        } else {
-//            isCurrentDateAdded = savedInstanceState.getBoolean(IS_DATE_ADDED);
-//            if (!isCurrentDateAdded) {
-//                getCurrent(CURRENT_DATE_REQUEST_CODE);
-//            }
-//            youCanGoNow = savedInstanceState.getBoolean(YOU_CAN_GO_NOW);
-//            if (youCanGoNow) {
-//                enableFABForWentOut();
-//            }
-//        }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveStateInPreferences(IS_ATTENDED, isAttended);
+        saveStateInPreferences(YOU_CAN_GO_NOW, youCanGoNow);
+        if (employee != null) {
+            saveStateInPreferences(EMPLOYEE_EMAIL_VALUE_KEY, employee.getEmail());
+        }
+        if (workDay != null) {
+            saveStateInPreferences(WORKDAY_DATE_VALUE_KEY, workDay.getIn()/*workDay.getId()*/);
+        }
+    }
+
     //endregion
 
     //region Menu
@@ -136,7 +136,8 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
 
                 return true;
             case R.id.sign_out_action:
-                editSignInSessionPreferences(null);
+                saveStateInPreferences(EMPLOYEE_EMAIL_VALUE_KEY, "");
+                saveStateInPreferences(WORKDAY_DATE_VALUE_KEY, "");
                 navigateToLoginActivity();
                 return true;
             default:
@@ -151,9 +152,11 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
         workDay = today;
         if (workDay != null) {
             attendanceTimeEditText.setText(workDay.getIn());
+            setFABForWentOutAppearance(false);
+            isAttended = true;
+            youCanGoNow = false;
+            startTimer();
         }
-        isCurrentDateAdded = true;
-        startTimer();
     }
 
     @Override
@@ -161,6 +164,9 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
         workDay = today;
         if (workDay != null) {
             attendanceTimeEditText.setText(workDay.getOut());
+            setFABForAttendanceAppearance();
+            isAttended = false;
+            workDay = null;
         }
     }
 
@@ -184,6 +190,14 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     @Override
     public void showEmployee(Employee employee) {
         this.employee = employee;
+        String workdayId = preferences.getString(WORKDAY_DATE_VALUE_KEY, null);
+        if (!isNullOrEmpty(workdayId)) {
+            for (WorkDay workday : employee.getWorkDays()) {
+                if (workday.getIn().equals(workdayId)) {
+                    workDay = workday;
+                }
+            }
+        }
     }
 
     @Override
@@ -200,9 +214,14 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
 
     @Override
     public void changeFABIconAndDeactivate() {
-        outFab.setImageDrawable(getResources().getDrawable(R.drawable.exit_disable));
-        outFab.setEnabled(false);
-        isForAttendance = false;
+        if (isAttended) {
+            outFab.setImageDrawable(getResources().getDrawable(R.drawable.exit_disable));
+            isAttended = !isAttended;
+            outFab.setEnabled(false);
+        } else {
+            outFab.setImageDrawable(getResources().getDrawable(R.drawable.finger_print));
+            isAttended = !isAttended;
+        }
     }
 
     @Override
@@ -212,7 +231,6 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
 
     @Override
     public void deactivateFAB() {
-//        outFab.setImageDrawable(getResources().getDrawable(R.drawable.finger_print));
         outFab.setEnabled(false);
     }
     //endregion
@@ -221,10 +239,10 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
     @OnClick(R.id.out_fab)
     public void onViewClicked() {
         if (isOnNTGNetwork()) {
-            if (isForAttendance) {
+            if (!isAttended) {
                 workDay = new WorkDay();
                 ioPresenter.setEmployeeAttended(employee.getEmail(), workDay);
-            } else if (!isForAttendance) {
+            } else {
                 workDay.setOut();
                 ioPresenter.setEmployeeWentOut(employee.getEmail(), workDay.getId(), workDay);
             }
@@ -238,11 +256,15 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
 
     //region Helper Methods
 
-    private void editSignInSessionPreferences(String sessionId) {
+    private void saveStateInPreferences(String key, Object value) {
         preferences = getSharedPreferences(SHARED_PREFERENCES_FILE_KEY, Context.MODE_PRIVATE);
         if (preferences != null) {
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("employeeEmail", sessionId);
+            if (value instanceof String) {
+                editor.putString(key, (String) value);
+            } else if (value instanceof Boolean) {
+                editor.putBoolean(key, (Boolean) value);
+            }
             editor.apply();
         }
     }
@@ -251,15 +273,6 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
         Intent intent = new Intent(MainActivity.this, TimerService.class);
         serviceResultReceiver = new ServiceResultReceiver();
         intent.putExtra(RESULT_RECEIVER_INTENT_KEY, serviceResultReceiver);
-        startService(intent);
-    }
-
-
-    private void getCurrent(int requestCode) {
-        Intent intent = new Intent(MainActivity.this, DateTimeService.class);
-        serviceResultReceiver = new ServiceResultReceiver();
-        intent.putExtra(RESULT_RECEIVER_INTENT_KEY, serviceResultReceiver);
-        intent.putExtra(REQUEST_CODE_INTENT_KEY, requestCode);
         startService(intent);
     }
 
@@ -282,9 +295,17 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
         return acceptedMAC.contains(getNetworkMACAddress());
     }
 
-    private void enableFABForWentOut() {
-        outFab.setImageDrawable(getResources().getDrawable(R.drawable.exit));
-        outFab.setEnabled(true);
+    private void setFABForWentOutAppearance(boolean isEnabled) {
+        outFab.setEnabled(isEnabled);
+        if (isEnabled) {
+            outFab.setImageDrawable(getResources().getDrawable(R.drawable.exit));
+        } else {
+            outFab.setImageDrawable(getResources().getDrawable(R.drawable.exit_disable));
+        }
+    }
+
+    private void setFABForAttendanceAppearance() {
+        outFab.setImageDrawable(getResources().getDrawable(R.drawable.finger_print));
     }
 //endregion
 
@@ -300,13 +321,7 @@ public class MainActivity extends AppCompatActivity implements IOContract.View {
             super.onReceiveResult(resultCode, resultData);
             if (resultCode == 0) {
                 youCanGoNow = resultData.getBoolean(YOU_CAN_GO_NOW);
-                if (youCanGoNow) {
-                    enableFABForWentOut();
-                }
-            } else if (resultCode == 1) {
-                currentDate = resultData.getString("date");
-            } else if (resultCode == 2) {
-                currentTime = resultData.getString("time");
+                setFABForWentOutAppearance(youCanGoNow);
             }
         }
     }

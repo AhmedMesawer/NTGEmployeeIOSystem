@@ -38,7 +38,6 @@ public class IOPresenter implements IOContract.Presenter {
                 wd -> {
                     ioView.hideLoadingIndicator();
                     ioView.showSuccessAttendanceMsg(wd);
-                    ioView.changeFABIconAndDeactivate();
                 },
                 errMsg -> {
                     ioView.hideLoadingIndicator();

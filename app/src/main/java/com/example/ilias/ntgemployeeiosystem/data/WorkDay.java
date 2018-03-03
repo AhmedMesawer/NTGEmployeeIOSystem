@@ -80,6 +80,7 @@ public class WorkDay implements Parcelable {
             String month = date.replaceFirst(" .+", "");
             date = date.substring(month.length() + 1);
             String dayNo = date.replaceFirst(",.+", "");
+            date = date.substring(dayNo.length() + 2);
             String year = date.replaceFirst(",.+", "");
             return new Date(dayNo, day, month, year);
         }

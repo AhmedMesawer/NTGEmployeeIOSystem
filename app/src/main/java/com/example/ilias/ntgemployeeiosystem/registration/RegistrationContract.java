@@ -10,10 +10,7 @@ import com.example.ilias.ntgemployeeiosystem.data.Employee;
 
 public interface RegistrationContract {
     interface View extends IView{
-        void showSuccessSignUpMsg();
         void showFailedSignUpMsg(String errMsg);
-        void showInvalidEmailMsg();
-        void showEmptyDataMsg();
         void navigateToEmployeeActivity(Employee employee);
         void navigateToLoginActivity();
     }

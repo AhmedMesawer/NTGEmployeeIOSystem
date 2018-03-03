@@ -2,6 +2,8 @@ package com.example.ilias.ntgemployeeiosystem.registration;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +42,8 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     RegistrationContract.Presenter registrationPresenter;
     @BindView(R.id.already_have_account_text_view)
     TextView alreadyHaveAccountTextView;
+    @BindView(R.id.registration_layout)
+    ConstraintLayout registrationLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +62,8 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     }
 
     @Override
-    public void showSuccessSignUpMsg() {
-
-    }
-
-    @Override
     public void showFailedSignUpMsg(String errMsg) {
-
-    }
-
-    @Override
-    public void showInvalidEmailMsg() {
-
-    }
-
-    @Override
-    public void showEmptyDataMsg() {
-
+        Snackbar.make(registrationLayout, errMsg, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
